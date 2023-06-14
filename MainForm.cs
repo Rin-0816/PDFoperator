@@ -11,7 +11,25 @@ namespace PDFoperator
         {
             Slicer slicer = new Slicer();
             Console.WriteLine(start_page.Text);
-            slicer.pdf_slicer(int.Parse(start_page.Text) - 1, int.Parse(end_page.Text) - 1);
+            int start = -1;
+            int end = -1;
+            try
+            {
+                start = int.Parse(start_page.Text) - 1;
+                end = int.Parse(end_page.Text) - 1;
+
+            } catch
+            {
+
+            }
+            if (start != -1 && end != -1)
+            {
+                slicer.pdf_slicer(start, end);
+            }
+            else
+            {
+                MessageBox.Show("ページ番号を正しく入力してください。");
+            }
         }
 
         private void texNumOnly_KeyPress(object sender, KeyPressEventArgs e)
