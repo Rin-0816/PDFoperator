@@ -14,30 +14,45 @@ namespace PDFoperator
 {
     internal class Slicer
     {
-        public void pdf_slicer()
+        public void pdf_slicer(int start,int end)
         {
-            // Create a new PDF document
-            PdfDocument document = new PdfDocument();
-            document.Info.Title = "Created with PdfSharpCore";
+            //ファイルを開く
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "PDFファイル(*.pdf)|*.pdf";
+            dialog.Title = "PDFファイルを開く";
 
-            // Create an empty page
-            PdfPage page = document.AddPage();
-
-            // Get an XGraphics object for drawing
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-
-            // Create a font
-            XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
-
-            // Draw the text
-            gfx.DrawString(
-                "Hello, World!", font, XBrushes.Black,
-                new XRect(0, 0, page.Width, page.Height),
-                XStringFormats.Center);
-
-            // Save the document...
-            const string filename = "HelloWorld.pdf";
-            document.Save(filename);
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                //PDFファイルを開く
+                PdfDocument inputDocument = PdfReader.Open(dialog.FileName, PdfDocumentOpenMode.Import);
+                //PDF及び、指定されているページ番号が存在するかを確認する。
+                if (inputDocument != null && 0 <= start && end < inputDocument.PageCount)
+                {
+                    //出力ファイル名を指定
+                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                    saveFileDialog1.Filter = "PDFファイル(*.pdf)|*.pdf";
+                    saveFileDialog1.Title = "PDFファイルを保存する";
+                    saveFileDialog1.ShowDialog();
+                    if (saveFileDialog1.FileName != "")
+                    {
+                        //出力ファイルを開く
+                        PdfDocument outputDocument = new PdfDocument();
+                        //出力ファイルにページを追加
+                        for (int i = start; i <= end; i++)
+                        {
+                            outputDocument.AddPage(inputDocument.Pages[i]);
+                        }
+                        //出力ファイルを保存
+                        outputDocument.Save(saveFileDialog1.FileName);
+                        outputDocument.Close();
+                    }
+                }
+                else
+                {
+                    //エラーメッセージを表示
+                    MessageBox.Show("PDFファイルを開けないか、もしくはページ数が不正です。");
+                }
+            }
         }
     }
 }
