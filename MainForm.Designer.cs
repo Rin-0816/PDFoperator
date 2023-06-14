@@ -1,6 +1,6 @@
 ﻿namespace PDFoperator
 {
-    partial class Form1
+    partial class MainWindow
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            slicer_button = new Button();
+            SuspendLayout();
+            // 
+            // slicer_button
+            // 
+            slicer_button.Location = new Point(32, 29);
+            slicer_button.Name = "slicer_button";
+            slicer_button.Size = new Size(127, 80);
+            slicer_button.TabIndex = 0;
+            slicer_button.Text = "slice";
+            slicer_button.UseVisualStyleBackColor = true;
+            slicer_button.Click += slicer_button_Click;
+            // 
+            // MainWindow
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(slicer_button);
+            Name = "MainWindow";
+            Text = "PDFoperator";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button slicer_button;
     }
 }
