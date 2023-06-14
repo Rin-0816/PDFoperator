@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using PdfSharpCore;
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+﻿using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 
 namespace PDFoperator
 {
     internal class Slicer
     {
-        public void pdf_slicer(int start,int end)
+        public void pdf_slicer(int start, int end)
         {
             //ファイルを開く
             OpenFileDialog dialog = new OpenFileDialog();

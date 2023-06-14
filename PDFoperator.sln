@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFoperator", "PDFoperator.csproj", "{E491A913-2198-4B7F-83BC-49B2AE52A118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDFoperator", "PDFoperator.csproj", "{E491A913-2198-4B7F-83BC-49B2AE52A118}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "..\Setup\Setup.vdproj", "{92D4090F-855A-4017-BB8E-85A02F60538C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{E491A913-2198-4B7F-83BC-49B2AE52A118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E491A913-2198-4B7F-83BC-49B2AE52A118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E491A913-2198-4B7F-83BC-49B2AE52A118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D4090F-855A-4017-BB8E-85A02F60538C}.Debug|Any CPU.ActiveCfg = Debug
+		{92D4090F-855A-4017-BB8E-85A02F60538C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
