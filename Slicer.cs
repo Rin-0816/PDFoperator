@@ -6,7 +6,7 @@ namespace PDFoperator
 {
     internal class Slicer
     {
-        public void pdf_slicer(int start, int end)
+        public void pdf_slicer()
         {   
             //ファイルを開く
             OpenFileDialog dialog = new OpenFileDialog();
@@ -15,8 +15,11 @@ namespace PDFoperator
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
+
                 //PDFファイルを開く
                 PdfDocument inputDocument = PdfReader.Open(dialog.FileName, PdfDocumentOpenMode.Import);
+                SelectPageDialog selectPageDialog = new SelectPageDialog();
+                var (start, end) = selectPageDialog.getPageNum(1,inputDocument.PageCount);
                 //PDF及び、指定されているページ番号が存在するかを確認する。
                 if (inputDocument != null && 0 <= start && end < inputDocument.PageCount)
                 {
@@ -24,9 +27,9 @@ namespace PDFoperator
                     SaveFileDialog saveFileDialog1 = new SaveFileDialog();
                     saveFileDialog1.Filter = "PDFファイル(*.pdf)|*.pdf";
                     saveFileDialog1.Title = "PDFファイルを保存する";
-                    saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(dialog.FileName)+"_"+(start+1)+"-"+(end+1)+".pdf";
+                    saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(dialog.FileName) + "_" + (start+1) + "-" + (end+1) + ".pdf";
                     DialogResult result = saveFileDialog1.ShowDialog();
-                    if(result == DialogResult.Cancel)
+                    if (result == DialogResult.Cancel)
                     {
                         MessageBox.Show("キャンセルされました。");
                         return;
