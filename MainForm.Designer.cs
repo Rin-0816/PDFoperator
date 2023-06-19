@@ -33,6 +33,7 @@
             // 
             // slicer_button
             // 
+            slicer_button.AllowDrop = true;
             slicer_button.Location = new Point(14, 16);
             slicer_button.Margin = new Padding(3, 4, 3, 4);
             slicer_button.Name = "slicer_button";
@@ -41,6 +42,8 @@
             slicer_button.Text = "PDFを切り抜く";
             slicer_button.UseVisualStyleBackColor = true;
             slicer_button.Click += slicer_button_Click;
+            slicer_button.DragDrop += slicer_button_DragDrop;
+            slicer_button.DragOver += slicer_button_DragEnter;
             // 
             // MainWindow
             // 

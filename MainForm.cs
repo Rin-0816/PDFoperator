@@ -10,21 +10,20 @@ namespace PDFoperator
         private void slicer_button_Click(object sender, EventArgs e)
         {
             Slicer slicer = new Slicer();
-            slicer.pdf_slicer();
+            slicer.pdf_slicer(null);
+        }
+        private void slicer_button_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
         }
 
-        private void texNumOnly_KeyPress(object sender, KeyPressEventArgs e)
+        private void slicer_button_DragDrop(object sender, DragEventArgs e)
         {
-            if (e.KeyChar == '\b')
-            {
-                return;
-            }
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-            if (e.KeyChar < '0' || '9' < e.KeyChar)
-            {
-                //押されたキーが 0～9でない場合は、イベントをキャンセルする
-                e.Handled = true;
-            }
+            string[] fileName = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            Slicer slicer = new Slicer();
+            slicer.pdf_slicer(fileName);
         }
     }
 }

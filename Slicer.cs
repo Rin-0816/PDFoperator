@@ -1,60 +1,78 @@
 ﻿using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using System.Diagnostics.Tracing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace PDFoperator
 {
     internal class Slicer
     {
-        public void pdf_slicer()
-        {   
-            //ファイルを開く
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "PDFファイル(*.pdf)|*.pdf";
-            dialog.Title = "PDFファイルを開く";
-
-            if (dialog.ShowDialog() == DialogResult.OK)
+        public void pdf_slicer(IReadOnlyCollection<string> data)
+        {
+            //引数がnullの場合、ファイルを開く
+            if (data == null)
             {
-
-                //PDFファイルを開く
-                PdfDocument inputDocument = PdfReader.Open(dialog.FileName, PdfDocumentOpenMode.Import);
-                SelectPageDialog selectPageDialog = new SelectPageDialog();
-                var (start, end) = selectPageDialog.getPageNum(1,inputDocument.PageCount);
-                //PDF及び、指定されているページ番号が存在するかを確認する。
-                if (inputDocument != null && 0 <= start && end < inputDocument.PageCount)
-                {
-                    //出力ファイル名を指定
-                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                    saveFileDialog1.Filter = "PDFファイル(*.pdf)|*.pdf";
-                    saveFileDialog1.Title = "PDFファイルを保存する";
-                    saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(dialog.FileName) + "_" + (start+1) + "-" + (end+1) + ".pdf";
-                    DialogResult result = saveFileDialog1.ShowDialog();
-                    if (result == DialogResult.Cancel)
-                    {
-                        MessageBox.Show("キャンセルされました。");
-                        return;
-                    }
-                    if (saveFileDialog1.FileName != "")
-                    {
-                        //出力ファイルを開く
-                        PdfDocument outputDocument = new PdfDocument();
-                        //出力ファイルにページを追加
-                        for (int i = start; i <= end; i++)
-                        {
-                            outputDocument.AddPage(inputDocument.Pages[i]);
-                        }
-                        //出力ファイルを保存
-                        outputDocument.Save(saveFileDialog1.FileName);
-                        outputDocument.Close();
-                        MessageBox.Show("処理が完了しました。");
-                    }
-                }
-                else
-                {
-                    //エラーメッセージを表示
-                    MessageBox.Show("PDFファイルを開けないか、もしくはページ数が不正です。");
+                OpenFileDialog dialog = Dialog.Open();
+                if (dialog != null) Slice(dialog.FileName);
+                else {
                     return;
                 }
+            }
+            else
+            {
+                foreach (string filename in data)
+                {
+                    Slice(filename);
+                }
+            }
+            MessageBox.Show("処理が完了しました。");
+            return;
+        }
+        private void Slice(string filename)
+        {
+            PdfDocument inputDocument;
+            try
+            {
+                //PDFファイルを開く
+                inputDocument = PdfReader.Open(filename, PdfDocumentOpenMode.Import);
+            }
+            catch
+            {
+                MessageBox.Show("PDFファイルを開けませんでした。");
+                return;
+            }
+            SelectPageDialog selectPageDialog = new SelectPageDialog();
+            var (start, end) = selectPageDialog.getPageNum(1, inputDocument.PageCount);
+            //PDF及び、指定されているページ番号が存在するかを確認する。
+            if (inputDocument != null && 0 <= start && end < inputDocument.PageCount)
+            {
+                SaveFileDialog saveDialog = Dialog.Save();
+                saveDialog.FileName = Path.GetFileNameWithoutExtension(filename) + "_" + (start + 1) + "-" + (end + 1) + ".pdf";
+                DialogResult result = saveDialog.ShowDialog();
+                if (result == DialogResult.Cancel)
+                {
+                    MessageBox.Show("キャンセルされました。");
+                    return;
+                }
+                if (saveDialog.FileName != "")
+                {
+                    //出力ファイルを開く
+                    PdfDocument outputDocument = new PdfDocument();
+                    //出力ファイルにページを追加
+                    for (int i = start; i <= end; i++)
+                    {
+                        outputDocument.AddPage(inputDocument.Pages[i]);
+                    }
+                    //出力ファイルを保存
+                    outputDocument.Save(saveDialog.FileName);
+                    outputDocument.Close();
+                }
+            }
+            else
+            {
+                //エラーメッセージを表示
+                MessageBox.Show("PDFファイルを開けないか、もしくはページ数が不正です。");
+                return;
             }
         }
     }
