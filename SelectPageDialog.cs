@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +19,8 @@ namespace PDFoperator
             end_page = new TextBox();
             label1 = new Label();
             label2 = new Label();
-            Cancel_button = new Button();
             Select_button = new Button();
+            Cancel_button = new Button();
             SuspendLayout();
             // 
             // start_page
@@ -33,7 +33,9 @@ namespace PDFoperator
             start_page.ShortcutsEnabled = false;
             start_page.Size = new Size(114, 27);
             start_page.TabIndex = 2;
+            //ハンドラーの追加
             start_page.KeyPress += texNumOnly_KeyPress;
+            start_page.KeyDown += SelectPageDialog_KeyDown;
             // 
             // end_page
             // 
@@ -45,7 +47,9 @@ namespace PDFoperator
             end_page.ShortcutsEnabled = false;
             end_page.Size = new Size(114, 27);
             end_page.TabIndex = 3;
+            //ハンドラーの追加
             end_page.KeyPress += texNumOnly_KeyPress;
+            end_page.KeyDown += SelectPageDialog_KeyDown;
             // 
             // label1
             // 
@@ -71,7 +75,7 @@ namespace PDFoperator
             Cancel_button.Location = new Point(152, 67);
             Cancel_button.Name = "Cancel_button";
             Cancel_button.Size = new Size(128, 29);
-            Cancel_button.TabIndex = 6;
+            Cancel_button.TabIndex = 7;
             Cancel_button.Text = "キャンセル";
             Cancel_button.UseVisualStyleBackColor = true;
             // 
@@ -81,7 +85,7 @@ namespace PDFoperator
             Select_button.Location = new Point(12, 67);
             Select_button.Name = "Select_button";
             Select_button.Size = new Size(123, 29);
-            Select_button.TabIndex = 7;
+            Select_button.TabIndex = 6;
             Select_button.Text = "決定";
             Select_button.UseVisualStyleBackColor = true;
             // 
@@ -111,6 +115,8 @@ namespace PDFoperator
         private Button Cancel_button;
         private Button Select_button;
         private TextBox end_page;
+
+        //ページ番号を取得する
         public (int, int) getPageNum(int x, int y)
         {
             SelectPageDialog dialog = new SelectPageDialog();
@@ -136,6 +142,7 @@ namespace PDFoperator
                 return (-1, -1);
             }
         }
+        //数字のみ入力可能
         private void texNumOnly_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\b')
@@ -149,5 +156,35 @@ namespace PDFoperator
                 e.Handled = true;
             }
         }
+
+        //Enterキーで次のコントロールにフォーカスを移動する
+        private void SelectPageDialog_Load(object sender, EventArgs e)
+        {
+            this.KeyPreview = true;
+        }
+        private void SelectPageDialog_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                //Tabキーを同時に押された場合、前のコントロールにフォーカスを移す
+                if (e.Shift && end_page.Focused)
+                {
+                    ProcessTabKey(false);
+                }
+                //フォーカスがend_pageにある場合、Select_buttonをクリックする
+                else if (end_page.Focused)
+                {
+                    Select_button.PerformClick();
+                }
+                else
+                {
+                    ProcessTabKey(true);
+                }
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                Cancel_button.PerformClick();
+            }
+        }   
     }
 }
